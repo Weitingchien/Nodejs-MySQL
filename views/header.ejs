@@ -6,7 +6,7 @@
     id="mainNav"
   >
     <div class="container">
-      <a class="nav-link text-light" href="#page-top">Node.js And MySQL</a>
+      <a class="nav-link text-light" href="/">Node.js And MySQL</a>
       <button
         class="navbar-toggler text-uppercase font-weight-bold bg-dark text-light rounded"
         type="button"
@@ -24,10 +24,19 @@
           <li class="nav-item mx-0 mx-lg-1">
             <a
               class="nav-link py-3 px-0 px-lg-3 rounded text-light"
-              href="#Home"
-              >Home</a
+              href="/member/info"
+              >Info</a
             >
           </li>
+          <% if(isLogin) { %>
+          <li class="nav-item mx-0 mx-lg-1">
+            <a
+              class="nav-link py-3 px-0 px-lg-3 rounded text-light"
+              href="/member/logout"
+              >logout</a
+            >
+          </li>
+          <% } else { %>
           <li class="nav-item mx-0 mx-lg-1">
             <a
               class="nav-link py-3 px-0 px-lg-3 rounded text-light"
@@ -36,10 +45,13 @@
             >
           </li>
           <li class="nav-item mx-0 mx-lg-1">
-            <a class="nav-link py-3 px-0 px-lg-3 rounded text-light" href="/"
+            <a
+              class="nav-link py-3 px-0 px-lg-3 rounded text-light"
+              href="/register"
               >Register</a
             >
           </li>
+          <% } %>
         </ul>
       </div>
     </div>

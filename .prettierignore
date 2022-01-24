@@ -1,0 +1,4 @@
+# Ignore all css, min.js files:
+*.min.css
+*.min.js
+index.ejs

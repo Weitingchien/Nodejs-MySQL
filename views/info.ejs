@@ -1,0 +1,10 @@
+<% allUser.forEach(function(user, index){ %>
+<div class="card text-white text-center bg-dark mb-3" style="max-width: 18rem">
+  <div class="card-header"><%= user.ID%></div>
+  <div class="card-body text-white">
+    <h5 class="card-title">title</h5>
+    <p class="card-text">Email: <%= user.email%></p>
+    <p class="card-text">帳號建立時間: <%=user.created_at%></p>
+  </div>
+</div>
+<% }); %>

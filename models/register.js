@@ -1,4 +1,4 @@
-const dbConnect = require('./db');
+const dbConnect = require('../config/db');
 const error = require('./error');
 
 const register = memberData => {

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" />
+  </head>
+  <body>
+    <%- include('header.ejs') %>
+    <div class="container">
+    <% if(currentPage === 'Home') {%>
+      <div class="list-group">
+        <a
+          href="#"
+          class="list-group-item list-group-item-action active"
+          aria-current="true"
+        >
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">List group item heading</h5>
+            <small>3 days ago</small>
+          </div>
+          <p class="mb-1">Some placeholder content in a paragraph.</p>
+          <small>And some small print.</small>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">List group item heading</h5>
+            <small class="text-muted">3 days ago</small>
+          </div>
+          <p class="mb-1">Some placeholder content in a paragraph.</p>
+          <small class="text-muted">And some muted small print.</small>
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">List group item heading</h5>
+            <small class="text-muted">3 days ago</small>
+          </div>
+          <p class="mb-1">Some placeholder content in a paragraph.</p>
+          <small class="text-muted">And some muted small print.</small>
+        </a>
+      </div>
+      <% } else if(currentPage === 'Login'){ %>
+        <%- include('login.ejs') %>
+      <% } else if(currentPage === 'Register'){ %>
+        <%- include('register.ejs') %>
+      <% } else if(currentPage === 'Admin_AllMemberInfo'){ %>
+        <%- include('info.ejs') %>
+      <% } %> 
+    </div>
+    <script src="/js/axios.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script>
+      const login = () => {
+        console.log('登入按鈕已點擊');
+        const memberData = {};
+        memberData.email = $('#email').val();
+        memberData.password = $('#password').val();
+        axios
+          .post('http://127.0.0.1:8080/member/login', memberData)
+          .then(data => {
+            console.log(data);
+            //res.render('header.ejs', { isLogin: data.isLogin });
+            window.location.href = 'http://127.0.0.1:8080/member/info';
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      };
+      const register = () => {
+        const memberData = {};
+        memberData.email = $('#email').val();
+        memberData.password = $('#password').val();
+        memberData.confirmPassword = $('#confirm-password').val();
+        axios.post('/member', memberData);
+      };
+    </script>
+  </body>
+</html>
