@@ -6,8 +6,8 @@ const register = memberData => {
   const data = {};
   return new Promise((resolve, reject) => {
     dbConnect.query(
-      'SELECT email FROM member WHERE email = ?',
-      [memberData.email],
+      'SELECT email FROM member WHERE email = ? OR username = ?',
+      [memberData.email, memberData.username],
       (err, results) => {
         if (err) {
           error(data, reject);
@@ -15,7 +15,7 @@ const register = memberData => {
         console.log(results.length);
         if (results.length >= 1) {
           data.status = 406;
-          data.error = '重複的E-mail';
+          data.error = '重複的E-mail或重複的使用者名稱';
           reject(data);
         } else {
           dbConnect.query(

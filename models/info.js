@@ -16,8 +16,6 @@ const info = (req, res) => {
         delete user.password;
       });
       dataForRendering = result;
-      /*       res.locals.allUser = dataForRendering;
-      res.locals.currentPage = 'Admin_AllMemberInfo'; */
       res.render(path.join(__dirname, '../views/index.ejs'), {
         currentPage: 'Admin_AllMemberInfo',
         allUser: dataForRendering

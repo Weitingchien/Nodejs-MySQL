@@ -5,20 +5,22 @@ const encryption = require('../models/encryption');
 
 class Member {
   toRegister(req, res, next) {
-    const { email, password } = req.body;
-    console.log(req.body);
+    const { username, email, password } = req.body;
     const encryptPassword = encryption(password);
     const memberData = {
+      username: username,
       email: email,
       password: encryptPassword
     };
     register(memberData)
       .then(result => {
-        res.json({ result: result });
+        //res.json({ result: result });
+        next();
       })
       .catch(err => {
         console.log(err);
-        res.json({ err: err });
+        //res.json({ err: err });
+        next();
       });
   }
 
@@ -29,9 +31,11 @@ class Member {
       email: email,
       password: encryptPassword
     };
-    login(memberData, res)
+    login(memberData, res, next)
       .then(result => {
         console.log('登入成功!');
+        // 要使用next()才能往下執行下一個middleware，這邊的下一個middleware是member.js裡的redirectBack函式
+        return next();
       })
       .catch(err => {
         console.log('登入失敗!');
