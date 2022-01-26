@@ -1,19 +1,18 @@
 const dbConnect = require('../config/db');
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 // Generating tokens
 const signToken = result => {
+  if (result.length === 0) return;
   return jwt.sign(
-    {
-      algorithm: 'HS256',
-      exp: Math.floor(Date.now() / 1000 + 60 * 10), // token 10分鐘後過期
-      data: result[0].ID
-    },
-    process.env.SECRET
+    { _id: result[0].ID }, // payload
+    process.env.SECRET, // secret
+    { expiresIn: Math.floor(Date.now() / 1000 + 60 * 10), algorithm: 'HS256' } // options ， token 10分鐘後過期
   );
 };
 
-const login = (memberData, res, token) => {
+const login = (memberData, res, next) => {
   const data = {};
   return new Promise((resolve, reject) => {
     dbConnect.query(
@@ -23,23 +22,29 @@ const login = (memberData, res, token) => {
         if (err) {
           data.status = 403;
           data.error = '找不到此帳戶!';
-          reject(data);
+          console.log('找不到此帳戶!');
+          //reject(data);
+          return;
+        } else if (result.length === 0) {
+          data.error = '您有欄位沒有輸入';
+          //reject(data);
           return;
         }
-        res
-          .cookie('x-access-token', signToken(result), {
-            httpOnly: true,
-            maxAge: 60000, //1分鐘
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict'
-          })
-          .status(200)
-          .send({
+        //axios不能從server端轉址，只能從client端使用window.location.href來轉址，要從server端轉址，client要使用傳統表單的方式來post
+        res.locals.isLogin = true;
+        res.cookie('x-access-token', signToken(result), {
+          httpOnly: true,
+          maxAge: 60000, //1分鐘
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict'
+        });
+        //.redirect(301, '/');
+        resolve(result);
+        /*                  .send({
             id: result[0].ID,
             email: result[0].email,
             message: 'Logged in successfully!'
-          });
-        resolve(result);
+          });  */
       }
     );
   });

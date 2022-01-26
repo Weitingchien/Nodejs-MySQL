@@ -2,3 +2,5 @@
 *.min.css
 *.min.js
 index.ejs
+register.ejs
+validationerror.ejs

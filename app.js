@@ -7,6 +7,8 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const PORT = 8080;
 const member = require('./routes/member');
+const admin = require('./routes/admin');
+const authorization = require('./models/authorization');
 
 console.log(process.env.NODE_ENV);
 
@@ -24,25 +26,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/', member);
+app.use('/', admin);
 
-app.get('/', (req, res) => {
+app.get('/', authorization, (req, res) => {
+  //res.locals.isLogin = false;
   res.render(path.join(__dirname, 'views/index.ejs'), {
-    currentPage: 'Home',
-    isLogin: false
+    currentPage: 'Home'
   });
 });
 
 app.get('/login', (req, res) => {
+  res.locals.isLogin = false;
   res.render(path.join(__dirname, 'views/index.ejs'), {
-    currentPage: 'Login',
-    isLogin: false
+    currentPage: 'Login'
   });
 });
 
 app.get('/register', (req, res) => {
+  res.locals.isLogin = false;
   res.render(path.join(__dirname, 'views/index.ejs'), {
     currentPage: 'Register',
-    isLogin: false
+    errorMessages: false
   });
 });
 

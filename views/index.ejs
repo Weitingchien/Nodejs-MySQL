@@ -53,30 +53,5 @@
     <script src="/js/jquery.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script>
-      const login = () => {
-        console.log('登入按鈕已點擊');
-        const memberData = {};
-        memberData.email = $('#email').val();
-        memberData.password = $('#password').val();
-        axios
-          .post('http://127.0.0.1:8080/member/login', memberData)
-          .then(data => {
-            console.log(data);
-            //res.render('header.ejs', { isLogin: data.isLogin });
-            window.location.href = 'http://127.0.0.1:8080/member/info';
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      };
-      const register = () => {
-        const memberData = {};
-        memberData.email = $('#email').val();
-        memberData.password = $('#password').val();
-        memberData.confirmPassword = $('#confirm-password').val();
-        axios.post('/member', memberData);
-      };
-    </script>
   </body>
 </html>
