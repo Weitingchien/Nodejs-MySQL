@@ -32,6 +32,7 @@ const authorization = (req, res, next) => {
           let role = req.url.split('/')[1];
           console.log(role);
           if (result[0].role === 'admin') {
+            res.locals.adminOnly = true;
             return next();
           } else if (
             (role === 'member' && result[0].role === 'member') ||
