@@ -6,6 +6,6 @@ const Role = require('../config/role');
 let memberInstance = new MemberMethod();
 
 // read
-router.get('/admin/membersinfo', authorization, memberInstance.getInfo);
+router.get('/membersinfo', authorization, memberInstance.getInfo);
 
 module.exports = router;

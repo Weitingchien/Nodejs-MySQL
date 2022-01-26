@@ -1,12 +1,25 @@
-<%- include('validationerror.ejs') %>
 <p class="lead">Register</p>
 <form action="/member/register" method="post">
   <div class="mb-3">
-    <label for="username" class="form-label">Username</label>
+    <label for="username" class="form-label">使用者名稱</label>
     <input type="text" class="form-control" name="username" id="username" autocomplete="username" />
+    <div id="usernameHelp" class="form-text">
+      使用者名稱將作為本平台顯示用途
+    </div>
+    <% if(errUsername.length) { %> 
+      <% errUsername.forEach(el => { %> 
+    <div class="alert d-flex align-items-center alert-danger alert-dismissible fade show" role="alert">
+      <img class="bi flex-shrink-0 me-2" src="/icons/exclamation-triangle-fill.svg" alt="" width="24" height="24" role="img" aria-label="Danger:" title="alerticon">
+      <div>
+        <%= el.msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    <% }) %> 
+    <% } %> 
   </div>
   <div class="mb-3">
-    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <label for="exampleInputEmail1" class="form-label">電子郵件</label>
     <input
       type="email"
       class="form-control"
@@ -15,12 +28,20 @@
       aria-describedby="emailHelp"
       autocomplete="email"
     />
-    <div id="emailHelp" class="form-text">
-      We'll never share your email with anyone else.
+    <% if(errEmail.length) { %> 
+      <% errEmail.forEach(el => { %> 
+    <div class="alert d-flex align-items-center alert-danger alert-dismissible fade show" role="alert">
+      <img class="bi flex-shrink-0 me-2" src="/icons/exclamation-triangle-fill.svg" alt="" width="24" height="24" role="img" aria-label="Danger:" title="alerticon">
+      <div>
+        <%= el.msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
     </div>
+    <% }) %> 
+    <% } %> 
   </div>
   <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
+    <label for="password" class="form-label">密碼</label>
     <input
       type="password"
       class="form-control"
@@ -28,17 +49,39 @@
       id="password"
       autocomplete="current-password"
     />
+    <% if(errPassword.length) { %> 
+      <% errPassword.forEach(el => { %> 
+    <div class="alert d-flex align-items-center alert-danger alert-dismissible fade show" role="alert">
+      <img class="bi flex-shrink-0 me-2" src="/icons/exclamation-triangle-fill.svg" alt="" width="24" height="24" role="img" aria-label="Danger:" title="alerticon">
+      <div>
+        <%= el.msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    <% }) %> 
+    <% } %>
   </div>
   <div class="mb-3">
-    <label for="passwordconf" class="form-label">Confirm Password</label>
+    <label for="passwordconf" class="form-label">確認密碼</label>
     <input
       type="password"
       class="form-control"
       name="confirm-password"
       id="confirm-password"
-      placeholder="Please confirm your password"
+      placeholder="請再一次確認您的密碼"
       autocomplete="new-password"
     />
+    <% if(errConfirmPassword.length) { %> 
+      <% errConfirmPassword.forEach(el => { %> 
+    <div class="alert d-flex align-items-center alert-danger alert-dismissible fade show" role="alert">
+      <img class="bi flex-shrink-0 me-2" src="/icons/exclamation-triangle-fill.svg" alt="" width="24" height="24" role="img" aria-label="Danger:" title="alerticon">
+      <div>
+        <%= el.msg %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    </div>
+    <% }) %> 
+    <% } %>
   </div>
   <button type="submit" class="btn btn-primary">
     Submit

@@ -10,9 +10,32 @@
       aria-describedby="emailHelp"
       autocomplete="email"
     />
-    <div id="emailHelp" class="form-text">
-      We'll never share your email with anyone else.
+    <% if(errEmail.length) { %> <% errEmail.forEach(el => { %>
+    <div
+      class="alert d-flex align-items-center alert-danger alert-dismissible fade show"
+      role="alert"
+    >
+      <img
+        class="bi flex-shrink-0 me-2"
+        src="/icons/exclamation-triangle-fill.svg"
+        alt=""
+        width="24"
+        height="24"
+        role="img"
+        aria-label="Danger:"
+        title="alerticon"
+      />
+      <div>
+        <%= el.msg %>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
     </div>
+    <% }) %> <% } %>
   </div>
   <div class="mb-3">
     <label for="exampleInputPassword1" class="form-label">Password</label>
@@ -23,6 +46,32 @@
       id="password"
       autocomplete="current-password"
     />
+    <% if(errPassword.length) { %> <% errPassword.forEach(el => { %>
+    <div
+      class="alert d-flex align-items-center alert-danger alert-dismissible fade show"
+      role="alert"
+    >
+      <img
+        class="bi flex-shrink-0 me-2"
+        src="/icons/exclamation-triangle-fill.svg"
+        alt=""
+        width="24"
+        height="24"
+        role="img"
+        aria-label="Danger:"
+        title="alerticon"
+      />
+      <div>
+        <%= el.msg %>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
+    <% }) %> <% } %>
   </div>
   <button type="submit" class="btn btn-primary">Submit</button>
 </form>

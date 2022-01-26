@@ -38,13 +38,7 @@ const login = (memberData, res, next) => {
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict'
         });
-        //.redirect(301, '/');
         resolve(result);
-        /*                  .send({
-            id: result[0].ID,
-            email: result[0].email,
-            message: 'Logged in successfully!'
-          });  */
       }
     );
   });
