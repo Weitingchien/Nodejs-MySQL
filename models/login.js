@@ -34,7 +34,7 @@ const login = (memberData, res, next) => {
         res.locals.isLogin = true;
         res.cookie('x-access-token', signToken(result), {
           httpOnly: true,
-          maxAge: 60000, //1分鐘
+          maxAge: 600000, //10分鐘
           secure: process.env.NODE_ENV === 'production',
           sameSite: 'strict'
         });

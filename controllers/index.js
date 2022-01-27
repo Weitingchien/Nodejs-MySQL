@@ -49,12 +49,24 @@ class Member {
   }
 
   getInfo(req, res, next) {
-    info(req, res)
+    let status = 'get';
+    info(req, res, status)
       .then(result => {
         console.log('成功獲取所有成員資訊');
       })
       .catch(err => {
         console.log('獲取失敗!');
+        res.status(500).send({ message: err.message });
+      });
+  }
+  updateInfo(req, res, next) {
+    let status = 'update';
+    info(req, res, status)
+      .then(result => {
+        console.log('成功更新成員資訊');
+      })
+      .catch(err => {
+        console.log('更新失敗!');
         res.status(500).send({ message: err.message });
       });
   }
