@@ -28,8 +28,13 @@
             data-bs-toggle="modal"
             data-bs-target="#data<%= user.ID%>"
             data-bs-whatever="@edit"
-          >
-            編輯
+          >編輯
+          </button>
+          <button type="button"
+            class="btn btn-primary deleteUserBtn"
+            id="deleteUserBtn"
+            data-userid="data-<%= user.ID %> deleteUserBtn">
+            刪除
           </button>
         </td>
       </tr>
@@ -56,15 +61,17 @@
           ></button>
         </div>
         <div class="modal-body">
-          <form>
-            <div class="mb-3">
+          <form id="user-from" class="was-validated">
+            <div class="mb-3" id="newUsernameDiv">
               <label for="newUsername" class="col-form-label">Username:</label>
               <input
                 type="text"
                 name="newUsername"
-                class="form-control"
+                class="form-control newUsername"
                 id="newUsername"
                 value="<%= user.username%>"
+                data-userid="data-<%= user.ID %>"
+                required
               />
             </div>
             <div class="mb-3">
@@ -72,9 +79,11 @@
               <input
                 type="email"
                 name="newEmail"
-                class="form-control"
+                class="form-control newEmail"
                 id="newEmail"
                 value="<%= user.email%>"
+                data-userid="data-<%= user.ID %>"
+                required
               />
             </div>
             <div class="mb-3">
@@ -82,11 +91,11 @@
               <select
                 id="newRole"
                 name="newRole"
-                class="form-select"
+                class="form-select newRole"
                 aria-label="Default select"
-                value="<%= user.role%>"
+                data-userid="data-<%= user.ID %>"
               >
-                <option selected disabled>
+                <option value="<%= user.role%>" selected disabled>
                   Open this select Role(current Role: <%= user.role%>)
                 </option>
                 <option value="superadmin">superAdmin</option>
@@ -106,9 +115,9 @@
           </button>
           <button
             type="button"
-            class="btn btn-primary"
+            class="btn btn-primary update-user-info-btn"
             id="updateUserInfoBtn"
-            data-userid="data-<%= user.ID %>"
+            data-userid="data-<%= user.ID %> updateUserInfoBtn"
           >
             Save
           </button>
@@ -118,21 +127,70 @@
   </div>
   <% }); %>
 </main>
-
+<script src="/js/axios.min.js"></script>
+<script src="/js/ejs.js"></script>
 <script>
-  const btn = document.getElementById('updateUserInfoBtn');
-  console.log(btn);
-  btn.addEventListener('click', function (e) {
-    console.log(e.target.dataset.userid);
-  });
-  //console.log(updateUserInfoData);
+  (function () {
+    'use strict';
 
-  /*     axios
-        .patch('http://127.0.0.1:8080/admin/membersinfo', updateUserInfoData)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        }); */
+    //let cancel;
+
+    const insertCurrentVal = (
+      i,
+      column,
+      updateUserInfoData,
+      userId,
+      userIdToNumber
+    ) => {
+      const newColumns = ['username', 'email', 'role', 'id'];
+      column.forEach((el, index) => {
+        if (el.getAttribute('data-userid') === userId) {
+          updateUserInfoData[newColumns[i]] = el.value;
+        }
+      });
+      updateUserInfoData.id = userIdToNumber;
+    };
+    const main = document.getElementById('main');
+
+    main.addEventListener('click', function (e) {
+      if (
+        e.target.dataset.userid &&
+        e.target.dataset.userid.split(' ')[1] === 'updateUserInfoBtn'
+      ) {
+        console.log('按鈕觸發')
+        let i = 0;
+        const updateUserInfoData = {};
+        const userId = e.target.dataset.userid.split(' ')[0]; // Edit button for which user I clicked and then compare
+        const userIdSplit = userId.split('-')[1];
+        const userIdToNumber = parseInt(userIdSplit, 10); // For database compare
+        const username = document.querySelectorAll('.newUsername');
+        const email = document.querySelectorAll('.newEmail');
+        const role = document.querySelectorAll('.newRole');
+        const columns = [username, email, role];
+
+        while (i < columns.length) {
+          insertCurrentVal(
+            i,
+            columns[i],
+            updateUserInfoData,
+            userId,
+            userIdToNumber
+          );
+          i++;
+        }
+
+        //傳統form表單沒有patch方法，所以這邊使用axios，由前端來轉址
+        axios
+          .patch('http://127.0.0.1:8080/admin/membersinfo', updateUserInfoData)
+          .then(success => {
+            if (success.status === 200) {
+              location.reload();
+            }
+          })
+          .catch(err => {
+            console.log(err.response.message)
+          });
+      }
+    });
+  })();
 </script>

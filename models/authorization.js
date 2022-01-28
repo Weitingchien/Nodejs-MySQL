@@ -29,15 +29,16 @@ const authorization = (req, res, next) => {
           console.log('驗證成功');
           res.locals.isLogin = true; // Login status for header.ejs
           req.userId = decoded._id;
-          let role = req.url.split('/')[1];
+          let path = req.url.split('/')[0];
           console.log(role);
           if (result[0].role === 'admin') {
             res.locals.adminOnly = true;
             return next();
           } else if (
-            (role === 'member' && result[0].role === 'member') ||
-            (role === '' && result[0].role === 'member')
+            (path === 'member' && result[0].role === 'member') ||
+            (path === '' && result[0].role === 'member')
           ) {
+            console.log(result[0].role);
             return next();
           }
           return res.render(path.join(__dirname, '../views/index.ejs'), {

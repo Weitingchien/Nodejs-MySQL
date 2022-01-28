@@ -39,7 +39,8 @@ class Member {
       })
       .catch(err => {
         console.log('登入失敗!');
-        res.status(500).send({ message: err.message });
+        res.redirect(301, '/login');
+        //res.status(500).send({ message: err.message });
       });
   }
 
@@ -60,10 +61,12 @@ class Member {
       });
   }
   updateInfo(req, res, next) {
+    console.log('updateInfo');
     let status = 'update';
     info(req, res, status)
       .then(result => {
         console.log('成功更新成員資訊');
+        return res.status(200).send({ result: result });
       })
       .catch(err => {
         console.log('更新失敗!');

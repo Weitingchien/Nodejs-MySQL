@@ -25,17 +25,18 @@ const info = (req, res, status) => {
       });
     });
   } else if (status === 'update') {
-    console.log(req.userId);
+    //console.log(req.userId);
     return new Promise((resolve, reject) => {
       dbConnect.query(
         'UPDATE member SET username = ?, email = ?, role = ? WHERE ID = ?',
-        [req.body.username, req.body.email, req.body.role, req.userId],
+        [req.body.username, req.body.email, req.body.role, req.body.id],
         (err, result) => {
           if (err) {
             data.error = '更新成員資料失敗';
             reject(data);
             return;
           }
+          resolve(result);
         }
       );
     });

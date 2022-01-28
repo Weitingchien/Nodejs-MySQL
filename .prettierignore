@@ -4,3 +4,5 @@
 index.ejs
 register.ejs
 validationerror.ejs
+info.ejs
+ejs.min.js
