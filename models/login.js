@@ -1,6 +1,5 @@
 const dbConnect = require('../config/db');
 const jwt = require('jsonwebtoken');
-const path = require('path');
 
 // Generating tokens
 const signToken = result => {
@@ -12,7 +11,7 @@ const signToken = result => {
   );
 };
 
-const login = (memberData, res, next) => {
+const login = (memberData, req, res, next) => {
   const data = {};
   return new Promise((resolve, reject) => {
     dbConnect.query(
@@ -31,7 +30,9 @@ const login = (memberData, res, next) => {
           return;
         }
         //axios不能從server端轉址，只能從client端使用window.location.href來轉址，要從server端轉址，client要使用傳統表單的方式來post
-        res.locals.isLogin = true;
+        req.session.userId = result[0].ID;
+        //res.locals.userID = req.session.userId;
+        console.log('userID' + res.locals.userID);
         res.cookie('x-access-token', signToken(result), {
           httpOnly: true,
           maxAge: 1800000, //30分鐘

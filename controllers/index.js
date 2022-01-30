@@ -2,6 +2,7 @@ const register = require('../models/register');
 const login = require('../models/login');
 const info = require('../models/info');
 const encryption = require('../models/encryption');
+const path = require('path');
 
 class Member {
   toRegister(req, res, next) {
@@ -14,12 +15,10 @@ class Member {
     };
     register(memberData)
       .then(result => {
-        //res.json({ result: result });
         next();
       })
       .catch(err => {
         console.log(err);
-        //res.json({ err: err });
         next();
       });
   }
@@ -31,22 +30,28 @@ class Member {
       email: email,
       password: encryptPassword
     };
-    login(memberData, res, next)
+    login(memberData, req, res, next)
       .then(result => {
         console.log('登入成功!');
-        // 要使用next()才能往下執行下一個middleware，這邊的下一個middleware是member.js裡的redirectBack函式
         return next();
       })
       .catch(err => {
         console.log('登入失敗!');
-        res.redirect(301, '/login');
-        //res.status(500).send({ message: err.message });
+        return res
+          .status(401)
+          .render(path.join(__dirname, '../views/index.ejs'), {
+            currentPage: 'Login',
+            errorLoginMessage: '登入失敗，找不到此使用者',
+            userID: false,
+            errEmail: [],
+            errPassword: []
+          });
       });
   }
 
   toLogout(req, res, next) {
-    res.locals.isLogin = false;
-    return res.clearCookie('x-access-token').redirect('/');
+    req.session.userId = null;
+    return res.redirect('/');
   }
 
   getInfo(req, res, next) {
@@ -57,11 +62,10 @@ class Member {
       })
       .catch(err => {
         console.log('獲取失敗!');
-        res.status(500).send({ message: err.message });
       });
   }
   updateInfo(req, res, next) {
-    console.log('updateInfo');
+    console.log('updateMemberInfo');
     let status = 'update';
     info(req, res, status)
       .then(result => {
@@ -71,6 +75,19 @@ class Member {
       .catch(err => {
         console.log('更新失敗!');
         res.status(500).send({ message: err.message });
+      });
+  }
+  deleteMemberInfo(req, res, next) {
+    let status = 'delete';
+    info(req, res, status)
+      .then(result => {
+        console.log('成功刪除成員');
+        return res.status(200).send({ result: result });
+      })
+      .catch(err => {
+        console.log('刪除成員失敗');
+        console.log(err);
+        return res.redirect(302, '/admin/membersinfo');
       });
   }
 }

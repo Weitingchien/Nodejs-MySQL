@@ -20,8 +20,6 @@ const search = () => {
 };
 
 const registerValidationRules = () => {
-  //console.log('執行 validationRules函式');
-  //return [
   return [
     body('username')
       .trim()
@@ -184,11 +182,9 @@ const classificationError = errors => {
 
 const validation = async (req, res, next) => {
   console.log('執行 validation函式');
-  //const { email, password, confirmPassword } = req.body;
   const resUrl = req.url;
   console.log(resUrl);
   const errors = validationResult(req);
-  console.log(errors);
   let errorsMesCache = {};
 
   if (!errors.isEmpty()) {
@@ -203,33 +199,25 @@ const validation = async (req, res, next) => {
           errUsername: errorsMesCache.errorMesOfUsername,
           errEmail: errorsMesCache.errorMesOfEmail,
           errPassword: errorsMesCache.errorMesOfPassword,
-          errConfirmPassword: errorsMesCache.errorMesOfConfirmPassword
+          errConfirmPassword: errorsMesCache.errorMesOfConfirmPassword,
+          userID: false
         });
     } else if (resUrl === '/login') {
-      console.log('錯誤');
       return res
         .status(400)
         .render(path.join(__dirname, '../views/index.ejs'), {
           currentPage: 'Login',
-          errUsername: [],
           errEmail: errorsMesCache.errorMesOfEmail,
-          errPassword: errorsMesCache.errorMesOfPassword,
-          errConfirmPassword: []
-          //user: { email, password, confirmPassword }
+          errPassword: errorsMesCache.errorMesOfPassword
         });
     } else if (resUrl === '/membersinfo') {
-      console.log('錯誤');
       const result = await search();
-      //console.log(errorsMesCache.errorMesOfUsername);
-      //console.log(errorsMesCache.errorMesOfEmail);
       return res
         .status(400)
         .render(path.join(__dirname, '../views/index.ejs'), {
           currentPage: 'Admin_AllMemberInfo',
           errUsername: errorsMesCache.errorMesOfUsername,
           errEmail: errorsMesCache.errorMesOfEmail,
-          errPassword: [],
-          errConfirmPassword: [],
           allUser: result
         });
     }

@@ -21,7 +21,7 @@
         <td><%= user.role%></td>
         <td><%= user.created_at%></td>
         <td><%= user.updated_at%></td>
-        <td width="100">
+        <td width="200">
           <button
             type="button"
             class="btn btn-primary"
@@ -31,7 +31,7 @@
           >編輯
           </button>
           <button type="button"
-            class="btn btn-primary deleteUserBtn"
+            class="btn btn-danger deleteUserBtn"
             id="deleteUserBtn"
             data-userid="data-<%= user.ID %> deleteUserBtn">
             刪除
@@ -150,19 +150,19 @@
       });
       updateUserInfoData.id = userIdToNumber;
     };
+
     const main = document.getElementById('main');
 
     main.addEventListener('click', function (e) {
-      if (
-        e.target.dataset.userid &&
-        e.target.dataset.userid.split(' ')[1] === 'updateUserInfoBtn'
-      ) {
-        console.log('按鈕觸發')
-        let i = 0;
-        const updateUserInfoData = {};
+      if(e.target.dataset.userid){
         const userId = e.target.dataset.userid.split(' ')[0]; // Edit button for which user I clicked and then compare
         const userIdSplit = userId.split('-')[1];
         const userIdToNumber = parseInt(userIdSplit, 10); // For database compare
+        
+        if (e.target.dataset.userid.split(' ')[1] === 'updateUserInfoBtn') {
+        //console.log('更新按鈕觸發!')
+        let i = 0;
+        const updateUserInfoData = {};
         const username = document.querySelectorAll('.newUsername');
         const email = document.querySelectorAll('.newEmail');
         const role = document.querySelectorAll('.newRole');
@@ -190,7 +190,15 @@
           .catch(err => {
             console.log(err.response.message)
           });
+      } else if(e.target.dataset.userid.split(' ')[1] === 'deleteUserBtn'){
+         axios.delete('http://127.0.0.1:8080/admin/membersinfo',{id: userIdToNumber}).then(success => {
+          if(success.status === 200){
+            location.reload();
+          }
+        })
       }
+      }
+
     });
   })();
 </script>

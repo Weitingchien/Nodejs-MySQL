@@ -6,24 +6,26 @@ const {
   updatedMemberInfoValidationRules,
   validation
 } = require('../models/validation');
-//const Role = require('../config/role');
+const role = require('../config/role');
 let memberInstance = new MemberMethod();
 
-// 生產環境
-//router.get('/membersinfo', authorization, memberInstance.getInfo);
-
-// 測試環境
-
 //read
-router.get('/membersinfo', authorization, memberInstance.getInfo);
+router.get('/membersinfo', authorization(role.Admin), memberInstance.getInfo);
 
 // update
 router.patch(
   '/membersinfo',
-  authorization,
+  authorization(role.Admin),
   updatedMemberInfoValidationRules(),
   validation,
   memberInstance.updateInfo
+);
+
+// delete
+router.delete(
+  '/membersinfo',
+  authorization(role.Admin),
+  memberInstance.deleteMemberInfo
 );
 
 module.exports = router;

@@ -1,4 +1,30 @@
 <p class="lead">Login</p>
+<% if(errorLoginMessage) { %>
+<div
+  class="alert d-flex align-items-center alert-danger alert-dismissible fade show"
+  role="alert"
+>
+  <img
+    class="bi flex-shrink-0 me-2"
+    src="/icons/exclamation-triangle-fill.svg"
+    alt=""
+    width="24"
+    height="24"
+    role="img"
+    aria-label="Danger:"
+    title="alerticon"
+  />
+  <div>
+    <%= errorLoginMessage %>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="alert"
+      aria-label="Close"
+    ></button>
+  </div>
+</div>
+<% } %>
 <form action="/member/login" method="post">
   <div class="mb-3">
     <label for="exampleInputEmail1" class="form-label">Email address</label>

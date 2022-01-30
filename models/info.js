@@ -2,7 +2,6 @@ const dbConnect = require('../config/db');
 const path = require('path');
 
 const info = (req, res, status) => {
-  console.log(status);
   const data = {};
   if (status === 'get') {
     return new Promise((resolve, reject) => {
@@ -19,13 +18,13 @@ const info = (req, res, status) => {
         dataForRendering = result;
         res.render(path.join(__dirname, '../views/index.ejs'), {
           currentPage: 'Admin_AllMemberInfo',
-          allUser: dataForRendering
+          allUser: dataForRendering,
+          userID: req.userId ? req.userId : false
         });
         resolve(result);
       });
     });
   } else if (status === 'update') {
-    //console.log(req.userId);
     return new Promise((resolve, reject) => {
       dbConnect.query(
         'UPDATE member SET username = ?, email = ?, role = ? WHERE ID = ?',
@@ -37,6 +36,21 @@ const info = (req, res, status) => {
             return;
           }
           resolve(result);
+        }
+      );
+    });
+  } else if (status === 'delete') {
+    console.log(req.body.id);
+    return new Promise((resolve, reject) => {
+      dbConnect.query(
+        'DELETE FROM member WHERE ID = ?',
+        req.body.id,
+        (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
         }
       );
     });
